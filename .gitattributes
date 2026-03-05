@@ -1,0 +1,5 @@
+# Normalize all text files to use LF (Unix) line endings.
+# This prevents unnecessary diffs when working across different operating systems.
+# For more details, see: https://docs.github.com/en/get-started/getting-started-with-git/configuring-git-to-handle-line-endings
+
+* text=auto eol=lf
