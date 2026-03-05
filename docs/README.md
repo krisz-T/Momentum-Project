@@ -25,6 +25,16 @@ Momentum is a full-stack web application designed as a workout tracker to keep u
 
 ---
 
+## Screenshots
+
+**Admin Dashboard**
+![Admin Dashboard for Momentum](images/admin_dashboard_momentum.png)
+
+**Workout Session**
+![Workout Session in Momentum](images/workout_momentum.png)
+
+---
+
 ## Architecture
 
 Momentum is built using a classic **3-Tier Architecture** to ensure a clean separation of concerns.
