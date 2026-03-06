@@ -1,11 +1,6 @@
 # Momentum
 
-Momentum is a full-stack web application designed as a workout tracker to keep users consistent through RPG-like mechanics (XP, badges) and social competition. It was built as a final project for a Software Architectures course, demonstrating a clean 3-tier architecture, a secure API, and a polished user experience.
-
-## Live Demo
-
-*   **Backend API (Render):** `https://momentum-api.onrender.com`
-*   **Frontend UI (Vercel):** `https://momentum-krisz-t.vercel.app`
+Momentum is a full-stack web application designed as a workout tracker to keep users consistent through RPG-like mechanics (XP, badges) and social competition. It was built as a project for a Software Architectures course, demonstrating a clean 3-tier architecture, a secure API, and a polished user experience.
 
 ---
 
@@ -22,6 +17,7 @@ Momentum is a full-stack web application designed as a workout tracker to keep u
 *   **Admin Role:**
     *   Full CRUD (Create, Read, Update, Delete) functionality for managing users, training plans, and the exercise library.
     *   Ability to ban and unban users.
+    *   Search and manage the exercise library.
 
 ---
 
