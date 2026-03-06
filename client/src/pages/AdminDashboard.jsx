@@ -14,6 +14,18 @@ const AdminDashboard = () => {
   const [error, setError] = useState(null);
   const [isExerciseModalOpen, setIsExerciseModalOpen] = useState(false);
   const [isPlanModalOpen, setIsPlanModalOpen] = useState(false);
+  const [exerciseSearchTerm, setExerciseSearchTerm] = useState('');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(exerciseSearchTerm);
+    }, 300);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [exerciseSearchTerm]);
 
   const fetchPlans = useCallback(async () => {
     try {
@@ -217,8 +229,17 @@ const AdminDashboard = () => {
               <h3>Existing Exercises</h3>
               <button onClick={() => setIsExerciseModalOpen(true)} className="icon-button"><FaPlus /> <span>Create New Exercise</span></button>
             </div>
+            <form className="search-bar" onSubmit={(e) => e.preventDefault()}>
+                <input
+                    type="text"
+                    placeholder="Search exercises by name..."
+                    value={exerciseSearchTerm}
+                    onChange={(e) => setExerciseSearchTerm(e.target.value)}
+                    style={{ marginBottom: '1rem', padding: '0.5rem', width: 'calc(100% - 1rem)' }}
+                />
+            </form>
             <div className="manage-plans-list">
-              {exercises.map(ex => (
+              {exercises.filter(ex => ex.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase())).map(ex => (
                 <div key={ex.id} className="manage-plan-item">
                   <span>{ex.name}</span>
                   <div className="manage-item-actions">
