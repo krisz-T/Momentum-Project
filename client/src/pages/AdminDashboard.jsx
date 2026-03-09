@@ -198,9 +198,9 @@ const AdminDashboard = () => {
   return (
     <div>
       <div className="page-header">
-        <h1><FaTachometerAlt /> Admin Dashboard</h1>
+        <h1>Admin Dashboard</h1>
         <nav>
-          <Link to="/" className="icon-link"><FaArrowLeft /> <span>Back to Home</span></Link>
+          <Link to="/" className="icon-link" style={{ color: '#8b92ff' }}><FaArrowLeft /> <span>Back home</span></Link>
         </nav>
       </div>
       <div className="admin-section">
@@ -222,11 +222,11 @@ const AdminDashboard = () => {
                 <td className="action-cell">
                   <div className="action-buttons">
                     {user.is_banned ? (
-                      <button onClick={() => handleUnbanUser(user.id)} className="icon-button"><FaCheck /> <span>Unban</span></button>
+                      <button onClick={() => handleUnbanUser(user.id)} className="icon-button" title="Unban" style={{ padding: '0.5rem 0.8rem' }}><FaCheck /></button>
                     ) : (
-                      <button onClick={() => handleBanUser(user.id)} className="icon-button warning-button"><FaBan /> <span>Ban</span></button>
+                      <button onClick={() => handleBanUser(user.id)} className="icon-button warning-button" title="Ban" style={{ padding: '0.5rem 0.8rem' }}><FaBan /></button>
                     )}
-                    <button onClick={() => handleDeleteUser(user.id)} className="delete-button icon-button"><FaTrash /> <span>Delete</span></button>
+                    <button onClick={() => handleDeleteUser(user.id)} className="delete-button icon-button" title="Delete" style={{ padding: '0.5rem 0.8rem' }}><FaTrash /></button>
                   </div>
                 </td>
               </tr>
@@ -273,8 +273,8 @@ const AdminDashboard = () => {
           {activeTab === 'exercises' && (
             <div>
               <div className="content-manage-header">
-                <h3>Manage Exercises</h3>
-                <button onClick={() => setIsExerciseModalOpen(true)} className="icon-button"><FaPlus /> <span>Create New Exercise</span></button>
+                <h3>Exercises</h3>
+                <button onClick={() => setIsExerciseModalOpen(true)} className="icon-button"><FaPlus /> New Exercise</button>
               </div>
               <form className="search-bar" onSubmit={(e) => e.preventDefault()}>
                   <input
@@ -290,8 +290,8 @@ const AdminDashboard = () => {
                   <div key={ex.id} className="manage-plan-item">
                     <span>{ex.name}</span>
                     <div className="manage-item-actions">
-                      <Link to={`/admin/exercises/${ex.id}`} className="button-link icon-button"><FaPencilAlt /> <span>Manage</span></Link>
-                      <button onClick={() => handleDeleteExercise(ex.id)} className="delete-button-sm icon-button"><FaTrash /></button>
+                      <Link to={`/admin/exercises/${ex.id}`} className="manage-action-btn manage-edit-btn" title="Manage"><FaPencilAlt /> <span style={{ marginLeft: '0.4rem' }}>Manage</span></Link>
+                      <button onClick={() => handleDeleteExercise(ex.id)} className="manage-action-btn manage-delete-btn" title="Delete"><FaTrash /></button>
                     </div>
                   </div>
                 ))}
@@ -305,8 +305,8 @@ const AdminDashboard = () => {
           {activeTab === 'plans' && (
             <div>
               <div className="content-manage-header">
-                <h3>Manage Training Plans</h3>
-                <button onClick={() => setIsPlanModalOpen(true)} className="icon-button"><FaPlus /> <span>Create New Plan</span></button>
+                <h3>Training Plans</h3>
+                <button onClick={() => setIsPlanModalOpen(true)} className="icon-button"><FaPlus /> New Plan</button>
               </div>
               <form className="search-bar" onSubmit={(e) => e.preventDefault()}>
                   <input
@@ -322,8 +322,8 @@ const AdminDashboard = () => {
                   <div key={plan.id} className="manage-plan-item">
                     <span>{plan.title}</span>
                     <div className="manage-item-actions">
-                      <Link to={`/admin/plans/${plan.id}`} className="button-link icon-button"><FaPencilAlt /> <span>Manage</span></Link>
-                      <button onClick={() => handleDeletePlan(plan.id)} className="delete-button-sm icon-button"><FaTrash /></button>
+                      <Link to={`/admin/plans/${plan.id}`} className="manage-action-btn manage-edit-btn" title="Manage"><FaPencilAlt /> <span style={{ marginLeft: '0.4rem' }}>Manage</span></Link>
+                      <button onClick={() => handleDeletePlan(plan.id)} className="manage-action-btn manage-delete-btn" title="Delete"><FaTrash /></button>
                     </div>
                   </div>
                 ))}

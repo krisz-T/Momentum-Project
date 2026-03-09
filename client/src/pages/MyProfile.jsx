@@ -97,30 +97,30 @@ const MyProfile = () => {
   return (
     <div>
       <div className="page-header">
-        <h1><FaUser /> My Profile</h1>
-        <nav><Link to="/" className="icon-link"><FaArrowLeft /> <span>Back to Home</span></Link></nav>
+        <h1>My Profile</h1>
+        <nav><Link to="/" className="icon-link" style={{ color: '#8b92ff' }}><FaArrowLeft /> <span>Back home</span></Link></nav>
       </div>
 
       <div className="profile-details">
         {isEditing ? (
-          <form onSubmit={handleUpdateName} className="inline-form">
-            <input type="text" value={newName} onChange={(e) => setNewName(e.target.value)} required />
-            <button type="submit" className="icon-button"><FaSave /> <span>Save</span></button>
-            <button type="button" onClick={() => setIsEditing(false)} className="icon-button"><FaTimes /> <span>Cancel</span></button>
+          <form onSubmit={handleUpdateName} className="inline-form" style={{ padding: '0', backgroundColor: 'transparent', boxShadow: 'none', border: 'none', margin: '0 0 1rem 0' }}>
+            <input type="text" value={newName} onChange={(e) => setNewName(e.target.value)} required style={{ flexGrow: 1 }} />
+            <button type="submit" className="icon-button" style={{ backgroundColor: 'rgba(100,108,255,0.1)', color: '#8b92ff', borderColor: 'rgba(100,108,255,0.3)' }}><FaSave /></button>
+            <button type="button" onClick={() => setIsEditing(false)} className="icon-button" style={{ backgroundColor: 'transparent', color: '#ccc', borderColor: 'transparent' }}><FaTimes /></button>
             {updateError && <p style={{ color: '#ff6b6b' }}>{updateError}</p>}
           </form>
         ) : (
-          <div className="profile-header">
-            <h2>{userProfile.name}</h2>
-            <button onClick={() => setIsEditing(true)} className="icon-button"><FaPencilAlt /> <span>Edit Name</span></button>
+          <div className="profile-header" style={{ marginBottom: '1rem' }}>
+            <h2 style={{ margin: 0, fontSize: '2rem' }}>{userProfile.name}</h2>
+            <button onClick={() => setIsEditing(true)} className="icon-button" title="Edit Name" style={{ background: 'transparent', border: 'none', color: '#8b92ff', padding: '0.4rem', boxShadow: 'none' }}><FaPencilAlt /></button>
           </div>
         )}
-        <p>Role: {userProfile.role}</p>
-        <h3>Total XP: {userProfile.total_xp}</h3>
+        <p style={{ color: '#aaa', margin: '0.5rem 0' }}>Role: <span style={{ color: '#fff', fontWeight: '500' }}>{userProfile.role}</span></p>
+        <h3 style={{ marginTop: '1rem', color: '#a6abff' }}>Total XP: {userProfile.total_xp}</h3>
       </div>
 
       <div className="admin-section">
-        <h3><FaListAlt /> My Active Plans</h3>
+        <h3>My Active Plans</h3>
         {loading ? (
           <p>Loading plans...</p>
         ) : enrollments.length > 0 ? (
@@ -136,7 +136,7 @@ const MyProfile = () => {
       </div>
 
       <div className="admin-section">
-        <h3><FaHistory /> Recent Workouts</h3>
+        <h3>Recent Workouts</h3>
         {loading ? (
           <p>Loading history...</p>
         ) : workouts.length > 0 ? (
@@ -161,8 +161,8 @@ const MyProfile = () => {
         ) : <p>No workouts logged yet.</p>}
       </div>
 
-      <div className="badges-section">
-        <h3><FaTrophy /> My Badges</h3>
+      <div className="badges-section admin-section" style={{ borderTop: 'none', marginTop: '1rem' }}>
+        <h3>My Badges</h3>
         {loading ? (
           <p>Loading badges...</p>
         ) : badges.length > 0 ? (

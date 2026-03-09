@@ -93,18 +93,21 @@ const ActiveWorkoutPage = () => {
         )}
       </div>
 
-      <div className="workout-controls">
-        <button onClick={() => setIsPaused(!isPaused)} className="icon-button large-icon-button">
+      <div className="workout-controls" style={{ marginTop: '2rem' }}>
+        <button onClick={() => setIsPaused(!isPaused)} className="icon-button large-icon-button" style={{ backgroundColor: 'rgba(255,255,255,0.05)', color: '#fff', border: '1px solid rgba(255,255,255,0.2)', width: '60px', height: '60px', borderRadius: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           {isPaused ? <FaPlay /> : <FaPause />}
         </button>
         <button
           onClick={() => setCurrentExerciseIndex(prev => prev + 1)}
           disabled={currentExerciseIndex >= workout.workout_exercises.length - 1}
           className="icon-button large-icon-button"
+          style={{ backgroundColor: 'rgba(255,255,255,0.05)', color: '#fff', border: '1px solid rgba(255,255,255,0.2)', width: '60px', height: '60px', borderRadius: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
         >
           <FaStepForward />
         </button>
-        <button onClick={handleFinishWorkout} className="finish-button icon-button">
+      </div>
+      <div style={{ marginTop: '2rem' }}>
+        <button onClick={handleFinishWorkout} className="finish-button icon-button" style={{ padding: '1rem 2rem', fontSize: '1.2rem', backgroundColor: '#ff6b6b', color: '#fff', border: 'none', borderRadius: '12px', fontWeight: 'bold' }}>
           <FaStopCircle />
           <span>Finish Workout</span>
         </button>

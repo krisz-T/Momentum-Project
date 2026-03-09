@@ -26,11 +26,14 @@
 /* --- Auth Styles --- */
 .auth-container {
   max-width: 420px;
+  width: 100%;
   margin: 5rem auto;
-  padding: 2rem;
-  background-color: #242424;
-  border-radius: 8px;
-  border: 1px solid #333;
+  padding: 3rem;
+  background-color: rgba(25, 26, 35, 0.8);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
 }
 
 .auth-container h1 {
@@ -60,11 +63,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-  background-color: #242424;
-  border-radius: 8px;
-  margin-bottom: 2rem;
-  border: 1px solid #333;
+  padding: 1.2rem 2.5rem;
+  background-color: rgba(25, 26, 35, 0.8);
+  border-radius: 16px;
+  margin-bottom: 2.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
 }
 
 .brand-link {
@@ -100,17 +105,20 @@
   font-size: 0.9em;
 }
 
-/* --- Table Styles --- */
 table {
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 2rem;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 1rem;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 th, td {
-  border: 1px solid #333;
-  padding: 0.75rem;
+  padding: 1rem;
   text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .action-cell .action-buttons {
@@ -120,23 +128,30 @@ th, td {
 }
 
 th {
-  background-color: #2f2f2f;
+  background-color: rgba(255, 255, 255, 0.03);
+  font-weight: 600;
+  color: #ccc;
 }
 
-tr:nth-child(even) {
-  background-color: #242424;
+tr {
+  transition: background-color 0.2s;
+}
+
+tr:hover {
+  background-color: rgba(255, 255, 255, 0.02);
 }
 
 /* --- Form Styles --- */
 form {
-  background-color: #242424;
-  padding: 2rem;
-  border-radius: 8px;
+  background-color: rgba(25, 26, 35, 0.6);
+  padding: 2.5rem;
+  border-radius: 16px;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.5rem;
   margin-bottom: 2rem;
-  border: 1px solid #333;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   text-align: left;
 }
 
@@ -150,13 +165,20 @@ form div {
   gap: 0.5rem;
 }
 
-form input {
-  padding: 0.75rem;
-  border-radius: 4px;
-  border: 1px solid #555;
-  background-color: #1a1a1a;
+form input, form select, form textarea {
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(0, 0, 0, 0.2);
   color: white;
-  font-size: 1em;
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+form input:focus, form select:focus, form textarea:focus {
+  outline: none;
+  border-color: #646cff;
+  box-shadow: 0 0 0 2px rgba(100, 108, 255, 0.2);
 }
 
 form button {
@@ -171,11 +193,12 @@ hr {
 
 /* --- Profile Page Styles --- */
 .profile-details {
-  background-color: #242424;
-  padding: 2rem;
-  border-radius: 8px;
+  background-color: rgba(25, 26, 35, 0.6);
+  padding: 2.5rem;
+  border-radius: 16px;
   margin-top: 2rem;
-  border: 1px solid #333;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   text-align: left;
 }
 
@@ -195,16 +218,16 @@ hr {
 }
 
 .badge {
-  background-color: #3a3a3a;
-  border: 1px solid #555;
-  border-radius: 8px;
-  padding: 0.5rem 1rem;
+  background-color: rgba(100, 108, 255, 0.1);
+  color: #a6abff;
+  border: 1px solid rgba(100, 108, 255, 0.2);
+  border-radius: 20px;
+  padding: 0.5rem 1.2rem;
   font-weight: 500;
-}
-.badge {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  box-shadow: 0 2px 8px rgba(100, 108, 255, 0.1);
 }
 
 /* --- Training Plan Styles --- */
@@ -217,12 +240,19 @@ hr {
 }
 
 .plan-card {
-  background-color: #242424;
-  border: 1px solid #333;
-  border-radius: 8px;
-  padding: 1.5rem;
+  background-color: rgba(25, 26, 35, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 2rem;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.plan-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
 .plan-card h2 {
@@ -245,15 +275,17 @@ hr {
   text-align: center;
   background-color: #646cff;
   color: white;
-  padding: 0.6em 1.2em;
+  padding: 0.8em 1.4em;
   border-radius: 8px;
   text-decoration: none;
-  transition: background-color 0.25s;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(100, 108, 255, 0.3);
 }
 .button-link:hover {
-  background-color: #535bf2;
-  text-decoration: none;
-  color: white;
+  background-color: #747bff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(100, 108, 255, 0.4);
 }
 
 .workout-schedule {
@@ -262,9 +294,9 @@ hr {
 }
 
 .workout-schedule-item {
-  background-color: #242424;
-  border: 1px solid #333;
-  border-radius: 8px;
+  background-color: rgba(25, 26, 35, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
   padding: 1.5rem;
   margin-bottom: 1rem;
 }
@@ -308,13 +340,14 @@ hr {
 }
 
 .current-exercise-card {
-  background-color: #242424;
-  border: 1px solid #646cff; /* Highlight the active card */
-  border-radius: 8px;
-  padding: 2rem;
+  background-color: rgba(25, 26, 35, 0.8);
+  border: 1px solid rgba(100, 108, 255, 0.3);
+  border-radius: 16px;
+  padding: 3rem;
   width: 100%;
   max-width: 600px;
   text-align: center;
+  box-shadow: 0 10px 30px rgba(100, 108, 255, 0.15);
 }
 
 .current-exercise-card h3 {
@@ -362,7 +395,7 @@ hr {
 .admin-section {
   margin-top: 3rem;
   padding-top: 2rem;
-  border-top: 1px solid #444;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .admin-forms-container {
@@ -427,15 +460,30 @@ hr {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-shrink: 0; /* Prevent the action buttons from shrinking */
 }
 
 .manage-plan-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #2f2f2f;
-  padding: 1rem;
-  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.03);
+  padding: 1.2rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: transform 0.2s, background-color 0.2s;
+  gap: 1rem; /* Add gap between text and buttons */
+}
+.manage-plan-item span:first-child {
+  flex: 1;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: normal; /* Safely break words only when container is filled */
+  line-height: 1.4;
+}
+.manage-plan-item:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  transform: translateY(-2px);
 }
 
 .radio-group {
@@ -460,23 +508,51 @@ hr {
   border-color: #8c6a3a;
 }
 
-.delete-button-sm {
-  background-color: #5c2e2e;
-  border-color: #5c2e2e;
-  padding: 0.2em 0.6em;
-  font-size: 0.9em;
+.manage-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0.8rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: 1px solid transparent;
 }
-.delete-button-sm:hover {
-  border-color: #8c3a3a;
+
+.manage-edit-btn {
+  background-color: rgba(100, 108, 255, 0.1);
+  color: #8b92ff;
+  border-color: rgba(100, 108, 255, 0.2);
+}
+
+.manage-edit-btn:hover {
+  background-color: rgba(100, 108, 255, 0.2);
+  border-color: rgba(100, 108, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+.manage-delete-btn {
+  background-color: rgba(255, 107, 107, 0.1);
+  color: #ff6b6b;
+  border-color: rgba(255, 107, 107, 0.2);
+}
+
+.manage-delete-btn:hover {
+  background-color: rgba(255, 107, 107, 0.2);
+  border-color: rgba(255, 107, 107, 0.4);
+  transform: translateY(-1px);
 }
 
 .page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #444;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .page-header h1 {

@@ -6,8 +6,8 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #1a1a1a; /* A slightly darker background */
+  color: rgba(255, 255, 255, 0.9);
+  background-color: #0f1016; /* Deep, sleek nearly black background */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -27,29 +27,38 @@ h1 {
 
 button {
   border-radius: 8px;
-  border: 1px solid #555;
-  padding: 0.6em 1.2em;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.7em 1.4em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #242424;
+  background-color: rgba(255, 255, 255, 0.05); /* Subtle glass-like background */
+  color: #fff;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 button:hover {
-  border-color: #646cff;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+button:active {
+  transform: translateY(0);
 }
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 2px solid #646cff;
+  outline-offset: 2px;
 }
 
 a {
   font-weight: 500;
-  color: #646cff;
-  text-decoration: none; /* Remove underlines by default */
+  color: #8b92ff; /* Softer, more premium accent blue */
+  text-decoration: none; 
+  transition: color 0.2s ease-in-out;
 }
 a:hover {
-  color: #747bff;
-  text-decoration: underline;
+  color: #a6abff;
+  text-decoration: none; /* NO underlines, ever. */
 }

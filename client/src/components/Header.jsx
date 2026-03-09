@@ -20,15 +20,18 @@ const Header = () => {
       </div>
       <div className="header-right">
         {userProfile?.role === 'Admin' && (
-          <Link to="/admin" className="icon-link">
+          <Link to="/admin" className="icon-link" title="Admin Dashboard">
             <FaTachometerAlt />
-            <span>Admin</span>
           </Link>
         )}
-        <Link to="/profile" className="icon-link"><FaUser /><span>My Profile</span></Link>
-        <Link to="/plans" className="icon-link"><FaClipboardList /><span>Training Plans</span></Link>
-        <span>{session.user.email}</span>
-        <button onClick={handleLogout} className="icon-button">
+        <Link to="/plans" className="icon-link" title="Training Plans">
+          <FaClipboardList />
+        </Link>
+        <Link to="/profile" className="icon-link" title="My Profile">
+          <FaUser />
+        </Link>
+        <span style={{ color: '#888', margin: '0 0.5rem' }}>|</span>
+        <button onClick={handleLogout} className="icon-button" title="Logout" style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem', backgroundColor: 'transparent', border: '1px solid rgba(255,107,107,0.3)', color: '#ff6b6b' }}>
           <FaSignOutAlt />
           <span>Logout</span>
         </button>

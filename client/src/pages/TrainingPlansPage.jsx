@@ -26,9 +26,9 @@ const TrainingPlansPage = () => {
   return (
     <div>
       <div className="page-header">
-        <h1><FaClipboardList /> Training Plans</h1>
+        <h1>Training Plans</h1>
         <nav>
-          <Link to="/" className="icon-link"><FaArrowLeft /> <span>Back to Home</span></Link>
+          <Link to="/" className="icon-link" style={{ color: '#8b92ff' }}><FaArrowLeft /> <span>Back home</span></Link>
         </nav>
       </div>
       <p className="page-description">Browse our available plans to kickstart your fitness journey.</p>
@@ -43,9 +43,8 @@ const TrainingPlansPage = () => {
             <span>
               {plan.duration_weeks ? `${plan.duration_weeks} weeks` : 'Ongoing'}
             </span>
-            <Link to={`/plans/${plan.id}`} className="button-link icon-link">
-              <FaEye />
-              <span>View Plan</span>
+            <Link to={`/plans/${plan.id}`} className="button-link icon-link" style={{ display: 'inline-block', marginTop: '1rem' }}>
+              View Plan
             </Link>
           </div>
         ))}

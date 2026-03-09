@@ -101,8 +101,8 @@ const ManagePlanPage = () => {
               <div key={w.id} className="manage-plan-item">
                 <span>Day {w.day_of_plan}: {w.workout_type}</span>
                 <div className="manage-item-actions">
-                  <Link to={`/admin/workouts/${w.id}`} className="button-link icon-button"><FaPencilAlt /> <span>Manage Exercises</span></Link>
-                  <button onClick={() => handleDeleteWorkout(w.id)} className="delete-button-sm icon-button"><FaTrash /></button>
+                  <Link to={`/admin/workouts/${w.id}`} className="manage-action-btn manage-edit-btn" title="Manage"><FaPencilAlt /> <span style={{ marginLeft: '0.4rem' }}>Manage</span></Link>
+                  <button onClick={() => handleDeleteWorkout(w.id)} className="manage-action-btn manage-delete-btn" title="Delete"><FaTrash /></button>
                 </div>
               </div>
             ))}

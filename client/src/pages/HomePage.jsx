@@ -38,7 +38,7 @@ const HomePage = () => {
     <>
       <WorkoutForm onWorkoutLogged={handleWorkoutLogged} />
       <hr />
-      <h1><FaTrophy /> Momentum Leaderboard</h1>
+      <h1 style={{ marginTop: '2rem', fontSize: '2.5rem', fontWeight: '700' }}>Momentum Leaderboard</h1>
       {loading && <p>Loading...</p>}
       {error && <p>Error: {error}</p>}
       {!loading && !error && (

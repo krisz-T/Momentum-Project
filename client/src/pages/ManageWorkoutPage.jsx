@@ -131,7 +131,7 @@ const ManageWorkoutPage = () => {
             {workout.workout_exercises.map(we => (
               <div key={we.id} className="manage-plan-item">
                 <span>{we.exercises.name} ({we.sets}x{we.reps || `${we.duration_seconds}s`})</span>
-                <button onClick={() => handleRemoveExercise(we.id)} className="delete-button-sm icon-button"><FaTrash /></button>
+                <button onClick={() => handleRemoveExercise(we.id)} className="manage-action-btn manage-delete-btn" title="Remove"><FaTrash /></button>
               </div>
             ))}
           </div>
