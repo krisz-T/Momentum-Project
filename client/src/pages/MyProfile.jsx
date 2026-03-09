@@ -91,6 +91,26 @@ const MyProfile = () => {
     }
   };
 
+  const handleUnenroll = async (planId) => {
+    if (!window.confirm('Are you sure you want to unenroll from this plan?')) return;
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/plans/${planId}/enroll`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`,
+        },
+      });
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(errData.error || 'Failed to unenroll');
+      }
+      // Optimistically remove from state
+      setEnrollments(prev => prev.filter(e => e.plan_id !== planId));
+    } catch (err) {
+      alert(`Error: ${err.message}`);
+    }
+  };
+
   if (!userProfile) {
     return <div>Loading profile...</div>;
   }
@@ -129,7 +149,12 @@ const MyProfile = () => {
             {enrollments.map(enrollment => (
               <div key={enrollment.id} className="plan-card">
                 <h2>{enrollment.training_plans.title}</h2>
-                <Link to={`/plans/${enrollment.plan_id}`} className="button-link icon-link"><FaPlay /> <span>Continue Plan</span></Link>
+                <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
+                  <Link to={`/plans/${enrollment.plan_id}`} className="button-link icon-link"><FaPlay /> <span>Continue Plan</span></Link>
+                  <button onClick={() => handleUnenroll(enrollment.plan_id)} className="icon-button" style={{ backgroundColor: 'rgba(255, 107, 107, 0.1)', color: '#ff6b6b', border: '1px solid rgba(255, 107, 107, 0.3)', padding: '0.6rem 1rem', borderRadius: '8px', fontSize: '0.9rem', fontWeight: 'bold' }}>
+                    <FaTimes /> Unenroll
+                  </button>
+                </div>
               </div>
             ))}
           </div>

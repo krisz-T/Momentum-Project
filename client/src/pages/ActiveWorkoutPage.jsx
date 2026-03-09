@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { FaPlay, FaPause, FaStepForward, FaStopCircle } from 'react-icons/fa';
+import { FaPlay, FaPause, FaStepForward, FaStepBackward, FaStopCircle } from 'react-icons/fa';
 
 const ActiveWorkoutPage = () => {
   const location = useLocation();
@@ -139,6 +139,14 @@ const ActiveWorkoutPage = () => {
       </div>
 
       <div className="workout-controls" style={{ marginTop: '2rem' }}>
+        <button
+          onClick={() => setCurrentExerciseIndex(prev => prev - 1)}
+          disabled={currentExerciseIndex <= 0}
+          className="icon-button large-icon-button"
+          style={{ backgroundColor: 'rgba(255,255,255,0.05)', color: '#fff', border: '1px solid rgba(255,255,255,0.2)', width: '60px', height: '60px', borderRadius: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center', opacity: currentExerciseIndex <= 0 ? 0.3 : 1 }}
+        >
+          <FaStepBackward />
+        </button>
         <button onClick={() => setIsPaused(!isPaused)} className="icon-button large-icon-button" style={{ backgroundColor: 'rgba(255,255,255,0.05)', color: '#fff', border: '1px solid rgba(255,255,255,0.2)', width: '60px', height: '60px', borderRadius: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           {isPaused ? <FaPlay /> : <FaPause />}
         </button>
@@ -146,11 +154,12 @@ const ActiveWorkoutPage = () => {
           onClick={() => setCurrentExerciseIndex(prev => prev + 1)}
           disabled={currentExerciseIndex >= workout.workout_exercises.length - 1}
           className="icon-button large-icon-button"
-          style={{ backgroundColor: 'rgba(255,255,255,0.05)', color: '#fff', border: '1px solid rgba(255,255,255,0.2)', width: '60px', height: '60px', borderRadius: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+          style={{ backgroundColor: 'rgba(255,255,255,0.05)', color: '#fff', border: '1px solid rgba(255,255,255,0.2)', width: '60px', height: '60px', borderRadius: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center', opacity: currentExerciseIndex >= workout.workout_exercises.length - 1 ? 0.3 : 1 }}
         >
           <FaStepForward />
         </button>
       </div>
+
       <div style={{ marginTop: '2rem' }}>
         <button onClick={handleFinishWorkout} className="finish-button icon-button" style={{ padding: '1rem 2rem', fontSize: '1.2rem', backgroundColor: '#ff6b6b', color: '#fff', border: 'none', borderRadius: '12px', fontWeight: 'bold' }}>
           <FaStopCircle />

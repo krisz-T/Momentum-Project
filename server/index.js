@@ -137,10 +137,53 @@ app.get('/api/profile/analytics', authenticate, async (req, res) => {
 // --- PUBLIC & USER ROUTES ---
 app.get('/api/leaderboard', async (req, res) => {
   try {
-    const { data, error } = await supabase.from('users').select('id, name, total_xp').eq('is_banned', false).order('total_xp', { ascending: false }).limit(10);
-    if (error) throw error;
-    res.json(data);
+    const { timeframe } = req.query;
+
+    if (timeframe === 'week' || timeframe === 'month') {
+      const days = timeframe === 'week' ? 7 : 30;
+      const dateLimit = new Date();
+      dateLimit.setDate(dateLimit.getDate() - days);
+      const dateString = dateLimit.toISOString();
+
+      // Fetch all eligible users
+      const { data: users, error: usersError } = await supabase.from('users').select('id, name').eq('is_banned', false);
+      if (usersError) throw usersError;
+      
+      const userMap = users.reduce((acc, u) => {
+        acc[u.id] = { id: u.id, name: u.name, total_xp: 0 };
+        return acc;
+      }, {});
+
+      // Fetch recent workouts
+      const { data: workouts, error: workoutsError } = await supabase
+        .from('workouts')
+        .select('user_id, duration')
+        .gte('date_logged', dateString);
+      
+      if (workoutsError) throw workoutsError;
+
+      // Aggregate XP
+      workouts.forEach(w => {
+        if (userMap[w.user_id]) {
+          userMap[w.user_id].total_xp += Math.floor(w.duration / 4);
+        }
+      });
+
+      // Sort and slice top 10
+      const sortedUsers = Object.values(userMap)
+        .filter(u => u.total_xp > 0)
+        .sort((a, b) => b.total_xp - a.total_xp)
+        .slice(0, 10);
+      
+      return res.json(sortedUsers);
+    } else {
+      // Default / All-Time
+      const { data, error } = await supabase.from('users').select('id, name, total_xp').eq('is_banned', false).order('total_xp', { ascending: false }).limit(10);
+      if (error) throw error;
+      res.json(data);
+    }
   } catch (error) {
+    console.error('Leaderboard error:', error);
     res.status(500).json({ error: 'Failed to fetch leaderboard data' });
   }
 });
@@ -186,6 +229,18 @@ app.post('/api/plans/:id/enroll', authenticate, async (req, res) => {
     res.status(201).json(data);
   } catch (error) {
     res.status(500).json({ error: 'Failed to enroll in plan.' });
+  }
+});
+
+app.delete('/api/plans/:id/enroll', authenticate, async (req, res) => {
+  try {
+    const planId = req.params.id;
+    const userId = req.user.id;
+    const { error } = await supabase.from('user_plan_enrollments').delete().eq('user_id', userId).eq('plan_id', planId);
+    if (error) throw error;
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to unenroll from plan.' });
   }
 });
 
