@@ -47,3 +47,11 @@ Each entry follows a simple structure:
 *   **Prompt:** "Write the SQL to create the `user_plan_enrollments` table with foreign keys linking to `users` and `training_plans`."
 *   **AI Suggestion:** The AI generated the `CREATE TABLE` statement but hallucinated an incorrect syntax for the inline foreign key definitions, using `FOREIGN KEY plan_id REFERENCES plans(id)` directly after the column type without the proper `CONSTRAINT` declaration required by strict PostgreSQL standards.
 *   **My Evaluation:** **Modified.** The AI's SQL produced syntax errors when executed in the Supabase SQL editor. AI models occasionally struggle with strict dialect-specific database syntax. I had to manually consult the PostgreSQL documentation to correct the foreign key definitions (e.g., `REFERENCES public.users(id) ON DELETE CASCADE`) to ensure the relational integrity was correctly established. This highlighted that AI is a helpful starting point, but manual verification is essential for database migrations.
+
+### Entry 6: Performance & Scalability (Modified) - Dynamic Leaderboard Filtering
+
+*   **Prompt:** "How do I make the leaderboard filterable by 'This Week' and 'This Month'?"
+*   **AI Suggestion:** The AI suggested keeping the existing `GET /api/leaderboard` route as-is, and then having the React frontend fetch *all* workouts from the database, filter them by date in the user's browser, calculate the XP, sort the users, and slice the top 10.
+*   **My Evaluation:** **Modified & Rejected.** While that logic works for 5 early users, sending thousands of workout rows to the client browser is a massive performance bottleneck and bandwidth waste. I rejected this client-side bloat. Instead, I prompted the AI to rewrite the `GET /api/leaderboard` endpoint to accept a `?timeframe=` query parameter. This forces the Express backend to securely query the `workouts` table, aggregate the XP mathematically in memory on the robust server, and *only* send the calculated top 10 array (`[ {id, name, total_xp} ]`) over the network to the client. This architectural decision ensures the app remains scalable as the user base grows.
+
+---

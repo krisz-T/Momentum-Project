@@ -60,6 +60,13 @@ Endpoints for managing the currently authenticated user's profile.
 *   **Success Response:** `200 OK` with an array of workout objects.
 *   **Error Responses:** `401 Unauthorized`
 
+#### `GET /api/profile/analytics`
+
+*   **Description:** Aggregates all workout data for the authenticated user by date to provide charting metrics (total duration and XP gained per day).
+*   **Security:** Authenticated
+*   **Success Response:** `200 OK` with an array of aggregated daily objects.
+*   **Error Responses:** `401 Unauthorized`, `500 Internal Server Error`
+
 ---
 
 ### Tag: Public
@@ -68,7 +75,8 @@ Endpoints that are publicly accessible without authentication.
 
 #### `GET /api/leaderboard`
 
-*   **Description:** Fetches the top 10 users by total XP.
+*   **Description:** Fetches the top 10 users by total XP. Supports dynamic timeframes.
+*   **Query Parameters:** `?timeframe=week` or `?timeframe=month` (optional, defaults to all-time).
 *   **Security:** Public
 *   **Success Response:** `200 OK` with an array of user objects (`id`, `name`, `total_xp`).
 
@@ -105,6 +113,13 @@ Endpoints for user interactions with workouts and plans.
 *   **Security:** Authenticated
 *   **Success Response:** `201 Created` with the new enrollment object.
 *   **Error Responses:** `401 Unauthorized`, `409 Conflict` (if already enrolled).
+
+#### `DELETE /api/plans/:id/enroll`
+
+*   **Description:** Unenrolls the authenticated user from a specified training plan.
+*   **Security:** Authenticated
+*   **Success Response:** `204 No Content`.
+*   **Error Responses:** `401 Unauthorized`, `500 Internal Server Error`
 
 ---
 
