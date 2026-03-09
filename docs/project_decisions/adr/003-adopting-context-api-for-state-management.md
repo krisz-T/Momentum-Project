@@ -1,6 +1,6 @@
 # ADR 003: Adopting a Context API for Frontend State Management
 
-**Date:** 2026-03-27
+**Date:** 2026-03-09
 
 **Status:** Accepted
 

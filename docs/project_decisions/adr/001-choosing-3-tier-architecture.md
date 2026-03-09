@@ -1,16 +1,16 @@
 # ADR 001: Choosing a 3-Tier (Client-Server-Database) Architecture
 
-**Date:** 2026-03-27
+**Date:** 2026-03-09
 
 **Status:** Accepted
 
 ## Context
 
-The project requires a clear separation of concerns to be maintainable, testable, and easy to document. We needed an architectural pattern that would isolate the user interface (presentation logic), the core business rules (business logic), and the data storage mechanism. A monolithic structure, where frontend and backend code are mixed, would make it difficult to modify one part of the system without impacting others and would complicate API documentation and security enforcement.
+The project requires a clear separation of concerns to be maintainable, testable, and easy to document. I needed an architectural pattern that would isolate the user interface (presentation logic), the core business rules (business logic), and the data storage mechanism. A monolithic structure, where frontend and backend code are mixed, would make it difficult to modify one part of the system without impacting others and would complicate API documentation and security enforcement.
 
 ## Decision
 
-We will implement a classic **3-Tier Architecture**:
+I decided to implement a classic **3-Tier Architecture**:
 
 1.  **Tier 1: Presentation (Client)**
     *   A React (Vite) single-page application (SPA) responsible for all UI rendering and user interaction.
@@ -22,7 +22,7 @@ We will implement a classic **3-Tier Architecture**:
     *   It acts as the single gateway to the database, ensuring the client can never access the database directly.
 
 3.  **Tier 3: Data (Database)**
-    *   A cloud-hosted PostgreSQL database managed by Supabase.
+    *   A cloud-hosted PostgreSQL database managed by *Supabase*.
     *   Responsible for data persistence, relational integrity (foreign keys), and executing database functions (like `increment_user_xp`).
 
 ## Consequences
@@ -38,4 +38,4 @@ We will implement a classic **3-Tier Architecture**:
 
 *   **Increased Complexity:** Managing three separate components (frontend, backend, database) is more complex than a single monolithic application.
 *   **Network Latency:** Communication between the client and server introduces network latency that would not exist in a monolith. This is an acceptable trade-off for the flexibility gained.
-*   **Deployment Overhead:** Requires managing two separate deployments (Vercel for the frontend, Render for the backend), although our choice of PaaS providers mitigates this complexity.
+*   **Deployment Overhead:** If I were to deploy this project, it would require managing two separate deployments (Vercel for the frontend, Render for the backend), although my choice of PaaS providers mitigates this complexity.
