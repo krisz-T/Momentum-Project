@@ -23,11 +23,11 @@ Momentum is a full-stack web application designed as a workout tracker to keep u
 
 ## Screenshots
 
-**Admin Dashboard**
-![Admin Dashboard for Momentum](images/admin_dashboard_momentum.png)
+![Admin Dashboard for Momentum](images/admin_dashboard.png)
 
-**Workout Session**
-![Workout Session in Momentum](images/workout_momentum.png)
+---
+
+![Workout Session in Momentum](images/workout_page.png)
 
 ---
 
