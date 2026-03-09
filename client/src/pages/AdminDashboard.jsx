@@ -9,23 +9,35 @@ import Modal from '../components/Modal';
 const AdminDashboard = () => {
   const { session } = useAuth();
   const [users, setUsers] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalUsers, setTotalUsers] = useState(0);
+  const limit = 10;
   const [plans, setPlans] = useState([]);
   const [exercises, setExercises] = useState([]);
   const [error, setError] = useState(null);
   const [isExerciseModalOpen, setIsExerciseModalOpen] = useState(false);
   const [isPlanModalOpen, setIsPlanModalOpen] = useState(false);
   const [exerciseSearchTerm, setExerciseSearchTerm] = useState('');
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+  const [debouncedExerciseSearchTerm, setDebouncedExerciseSearchTerm] = useState('');
+  const [planSearchTerm, setPlanSearchTerm] = useState('');
+  const [debouncedPlanSearchTerm, setDebouncedPlanSearchTerm] = useState('');
+  const [activeTab, setActiveTab] = useState('exercises'); // 'exercises' or 'plans'
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      setDebouncedSearchTerm(exerciseSearchTerm);
+      setDebouncedExerciseSearchTerm(exerciseSearchTerm);
     }, 300);
 
-    return () => {
-      clearTimeout(handler);
-    };
+    return () => clearTimeout(handler);
   }, [exerciseSearchTerm]);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedPlanSearchTerm(planSearchTerm);
+    }, 300);
+
+    return () => clearTimeout(handler);
+  }, [planSearchTerm]);
 
   const fetchPlans = useCallback(async () => {
     try {
@@ -57,18 +69,19 @@ const AdminDashboard = () => {
     try {
       if (!session) throw new Error('Authentication error');
 
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users?page=${page}&limit=${limit}`, {
         headers: {
           'Authorization': `Bearer ${session.access_token}`,
         },
       });
       if (!response.ok) throw new Error('Failed to fetch users');
       const data = await response.json();
-      setUsers(data);
+      setUsers(data.users);
+      setTotalUsers(data.totalCount);
     } catch (err) {
       setError(err.message);
     }
-  }, [session]);
+  }, [session, page]);
 
   useEffect(() => {
     fetchUsers();
@@ -220,53 +233,106 @@ const AdminDashboard = () => {
             ))}
           </tbody>
         </table>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem', alignItems: 'center' }}>
+          <button 
+            disabled={page === 1} 
+            onClick={() => setPage(page - 1)}
+            style={{ padding: '0.5rem 1rem' }}
+          >
+            Previous
+          </button>
+          <span>Page {page} of {Math.ceil(totalUsers / limit) || 1} ({totalUsers} total users)</span>
+          <button 
+            disabled={page >= Math.ceil(totalUsers / limit)} 
+            onClick={() => setPage(page + 1)}
+            style={{ padding: '0.5rem 1rem' }}
+          >
+            Next
+          </button>
+        </div>
       </div>
       <div className="admin-section">
         <h2><FaBoxOpen /> Content Management</h2>
+        
+        <div className="tabs-container">
+          <button 
+            className={`tab-button ${activeTab === 'exercises' ? 'active' : ''}`}
+            onClick={() => setActiveTab('exercises')}
+          >
+            Exercises Library
+          </button>
+          <button 
+            className={`tab-button ${activeTab === 'plans' ? 'active' : ''}`}
+            onClick={() => setActiveTab('plans')}
+          >
+            Training Plans
+          </button>
+        </div>
+
         <div className="admin-forms-container">
-          <div>
-            <div className="content-manage-header">
-              <h3>Existing Exercises</h3>
-              <button onClick={() => setIsExerciseModalOpen(true)} className="icon-button"><FaPlus /> <span>Create New Exercise</span></button>
-            </div>
-            <form className="search-bar" onSubmit={(e) => e.preventDefault()}>
-                <input
-                    type="text"
-                    placeholder="Search exercises by name..."
-                    value={exerciseSearchTerm}
-                    onChange={(e) => setExerciseSearchTerm(e.target.value)}
-                    style={{ marginBottom: '1rem', padding: '0.5rem', width: 'calc(100% - 1rem)' }}
-                />
-            </form>
-            <div className="manage-plans-list">
-              {exercises.filter(ex => ex.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase())).map(ex => (
-                <div key={ex.id} className="manage-plan-item">
-                  <span>{ex.name}</span>
-                  <div className="manage-item-actions">
-                    <Link to={`/admin/exercises/${ex.id}`} className="button-link icon-button"><FaPencilAlt /> <span>Manage</span></Link>
-                    <button onClick={() => handleDeleteExercise(ex.id)} className="delete-button-sm icon-button"><FaTrash /></button>
+          {activeTab === 'exercises' && (
+            <div>
+              <div className="content-manage-header">
+                <h3>Manage Exercises</h3>
+                <button onClick={() => setIsExerciseModalOpen(true)} className="icon-button"><FaPlus /> <span>Create New Exercise</span></button>
+              </div>
+              <form className="search-bar" onSubmit={(e) => e.preventDefault()}>
+                  <input
+                      type="text"
+                      placeholder="Search exercises by name..."
+                      value={exerciseSearchTerm}
+                      onChange={(e) => setExerciseSearchTerm(e.target.value)}
+                      style={{ marginBottom: '1rem', padding: '0.5rem', width: 'calc(100% - 1rem)' }}
+                  />
+              </form>
+              <div className="manage-plans-list">
+                {exercises.filter(ex => ex.name.toLowerCase().includes(debouncedExerciseSearchTerm.toLowerCase())).map(ex => (
+                  <div key={ex.id} className="manage-plan-item">
+                    <span>{ex.name}</span>
+                    <div className="manage-item-actions">
+                      <Link to={`/admin/exercises/${ex.id}`} className="button-link icon-button"><FaPencilAlt /> <span>Manage</span></Link>
+                      <button onClick={() => handleDeleteExercise(ex.id)} className="delete-button-sm icon-button"><FaTrash /></button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+                {exercises.filter(ex => ex.name.toLowerCase().includes(debouncedExerciseSearchTerm.toLowerCase())).length === 0 && (
+                  <p style={{ color: '#aaa', padding: '1rem' }}>No exercises found.</p>
+                )}
+              </div>
             </div>
-          </div>
-          <div>
-            <div className="content-manage-header">
-              <h3>Existing Plans</h3>
-              <button onClick={() => setIsPlanModalOpen(true)} className="icon-button"><FaPlus /> <span>Create New Plan</span></button>
-            </div>
-            <div className="manage-plans-list">
-              {plans.map(plan => (
-                <div key={plan.id} className="manage-plan-item">
-                  <span>{plan.title}</span>
-                  <div className="manage-item-actions">
-                    <Link to={`/admin/plans/${plan.id}`} className="button-link icon-button"><FaPencilAlt /> <span>Manage</span></Link>
-                    <button onClick={() => handleDeletePlan(plan.id)} className="delete-button-sm icon-button"><FaTrash /></button>
+          )}
+
+          {activeTab === 'plans' && (
+            <div>
+              <div className="content-manage-header">
+                <h3>Manage Training Plans</h3>
+                <button onClick={() => setIsPlanModalOpen(true)} className="icon-button"><FaPlus /> <span>Create New Plan</span></button>
+              </div>
+              <form className="search-bar" onSubmit={(e) => e.preventDefault()}>
+                  <input
+                      type="text"
+                      placeholder="Search training plans by title..."
+                      value={planSearchTerm}
+                      onChange={(e) => setPlanSearchTerm(e.target.value)}
+                      style={{ marginBottom: '1rem', padding: '0.5rem', width: 'calc(100% - 1rem)' }}
+                  />
+              </form>
+              <div className="manage-plans-list">
+                {plans.filter(plan => plan.title.toLowerCase().includes(debouncedPlanSearchTerm.toLowerCase())).map(plan => (
+                  <div key={plan.id} className="manage-plan-item">
+                    <span>{plan.title}</span>
+                    <div className="manage-item-actions">
+                      <Link to={`/admin/plans/${plan.id}`} className="button-link icon-button"><FaPencilAlt /> <span>Manage</span></Link>
+                      <button onClick={() => handleDeletePlan(plan.id)} className="delete-button-sm icon-button"><FaTrash /></button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+                {plans.filter(plan => plan.title.toLowerCase().includes(debouncedPlanSearchTerm.toLowerCase())).length === 0 && (
+                  <p style={{ color: '#aaa', padding: '1rem' }}>No training plans found.</p>
+                )}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
 

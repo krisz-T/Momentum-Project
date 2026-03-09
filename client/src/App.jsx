@@ -14,11 +14,17 @@ import ActiveWorkoutPage from './pages/ActiveWorkoutPage';
 import TrainingPlansPage from './pages/TrainingPlansPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import Header from './components/Header';
+import Spinner from './components/Spinner';
+import NotFoundPage from './pages/NotFoundPage';
 import { useAuth } from './contexts/AuthContext';
 import { FaDumbbell } from 'react-icons/fa';
 
 function App() {
-  const { session, isPasswordRecovery, onPasswordUpdated } = useAuth();
+  const { session, isPasswordRecovery, onPasswordUpdated, loading } = useAuth();
+
+  if (loading) {
+    return <Spinner />;
+  }
 
   return (
     <div className="container">
@@ -61,6 +67,7 @@ function App() {
             <Route path="/plans" element={<TrainingPlansPage />} />
             <Route path="/plans/:id" element={<PlanDetailPage />} />
             <Route path="/workout-session" element={<ActiveWorkoutPage />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </div>
       )}

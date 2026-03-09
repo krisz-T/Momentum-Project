@@ -187,9 +187,18 @@ app.post('/api/workouts', authenticate, async (req, res) => {
 // --- ADMIN-ONLY ROUTES ---
 app.get('/api/users', authenticate, isAdmin, async (req, res) => {
   try {
-    const { data, error } = await supabase.from('users').select('id, name, is_banned');
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const start = (page - 1) * limit;
+    const end = start + limit - 1;
+
+    const { data, count, error } = await supabase
+      .from('users')
+      .select('id, name, is_banned', { count: 'exact' })
+      .range(start, end);
+
     if (error) throw error;
-    res.json(data);
+    res.json({ users: data, totalCount: count, page, limit });
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch users' });
   }
