@@ -9,9 +9,53 @@ const ActiveWorkoutPage = () => {
   const { session } = useAuth();
   const { workout } = location.state || {}; // Get the workout data passed from the previous page
 
-  const [timer, setTimer] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
+  const [timer, setTimer] = useState(() => {
+    const savedState = localStorage.getItem('momentum_active_workout');
+    if (savedState) {
+      const parsed = JSON.parse(savedState);
+      // Only restore timer if it's the same workout plan/type
+      if (workout && parsed.workoutId === workout.id) {
+        return parsed.timer;
+      }
+    }
+    return 0;
+  });
+
+  const [isPaused, setIsPaused] = useState(() => {
+    const savedState = localStorage.getItem('momentum_active_workout');
+    if (savedState) {
+      const parsed = JSON.parse(savedState);
+      if (workout && parsed.workoutId === workout.id) {
+        return parsed.isPaused;
+      }
+    }
+    return false;
+  });
+
+  const [currentExerciseIndex, setCurrentExerciseIndex] = useState(() => {
+    const savedState = localStorage.getItem('momentum_active_workout');
+    if (savedState) {
+      const parsed = JSON.parse(savedState);
+      if (workout && parsed.workoutId === workout.id) {
+        return parsed.currentExerciseIndex;
+      }
+    }
+    return 0;
+  });
+
+  // Save state to localStorage whenever it changes
+  useEffect(() => {
+    if (workout) {
+      const stateToSave = {
+        workoutId: workout.id,
+        timer,
+        isPaused,
+        currentExerciseIndex,
+        lastUpdated: new Date().getTime()
+      };
+      localStorage.setItem('momentum_active_workout', JSON.stringify(stateToSave));
+    }
+  }, [timer, isPaused, currentExerciseIndex, workout]);
 
   useEffect(() => {
     if (!workout) {
@@ -60,6 +104,7 @@ const ActiveWorkoutPage = () => {
         throw new Error(errData.error || 'Failed to log workout.');
       }
       alert(`Workout Logged! You earned XP for ${formatTime(timer)} of work!`);
+      localStorage.removeItem('momentum_active_workout'); // Clear saved state on finish
       navigate('/'); // Go back to home
     } catch (error) {
       alert(`Error: ${error.message}`);

@@ -2,13 +2,15 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { useAuth } from '../contexts/AuthContext';
-import { FaArrowLeft, FaPencilAlt, FaSave, FaTimes, FaListAlt, FaHistory, FaTrophy, FaPlay, FaAward, FaUser } from 'react-icons/fa';
+import { FaArrowLeft, FaPencilAlt, FaSave, FaTimes, FaListAlt, FaHistory, FaTrophy, FaPlay, FaAward, FaUser, FaChartLine } from 'react-icons/fa';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
 const MyProfile = () => {
   const { userProfile, session, fetchProfile } = useAuth();
   const [badges, setBadges] = useState([]);
   const [enrollments, setEnrollments] = useState([]);
   const [workouts, setWorkouts] = useState([]);
+  const [analyticsData, setAnalyticsData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const badgeDescriptions = {
@@ -37,19 +39,18 @@ const MyProfile = () => {
       const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
       try {
-        const [badgesRes, enrollmentsRes, workoutsRes] = await Promise.all([
+        const [badgesRes, enrollmentsRes, workoutsRes, analyticsRes] = await Promise.all([
           fetch(`${baseUrl}/api/profile/badges`, { headers }),
           fetch(`${baseUrl}/api/profile/enrollments`, { headers }),
           fetch(`${baseUrl}/api/profile/workouts`, { headers }),
+          fetch(`${baseUrl}/api/profile/analytics`, { headers }),
         ]);
 
-        const badgesData = await badgesRes.json();
-        const enrollmentsData = await enrollmentsRes.json();
-        const workoutsData = await workoutsRes.json();
-
-        setBadges(badgesData);
-        setEnrollments(enrollmentsData);
-        setWorkouts(workoutsData);
+        if (badgesRes.ok) setBadges(await badgesRes.json());
+        if (enrollmentsRes.ok) setEnrollments(await enrollmentsRes.json());
+        if (workoutsRes.ok) setWorkouts(await workoutsRes.json());
+        if (analyticsRes.ok) setAnalyticsData(await analyticsRes.json());
+        
       } catch (error) {
         console.error("Failed to fetch profile data:", error);
       } finally {
@@ -133,6 +134,30 @@ const MyProfile = () => {
             ))}
           </div>
         ) : <p>You are not enrolled in any active plans.</p>}
+      </div>
+
+      <div className="admin-section">
+        <h3><FaChartLine /> Workout Analytics</h3>
+        {loading ? (
+          <p>Loading chart data...</p>
+        ) : analyticsData.length > 0 ? (
+          <div style={{ width: '100%', height: 300, marginTop: '1.5rem', backgroundColor: 'rgba(25, 26, 35, 0.6)', padding: '1rem', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={analyticsData} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                <XAxis dataKey="date" stroke="#aaa" />
+                <YAxis yAxisId="left" stroke="#8b92ff" />
+                <YAxis yAxisId="right" orientation="right" stroke="#66bb6a" />
+                <Tooltip contentStyle={{ backgroundColor: 'rgba(25, 26, 35, 0.9)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px' }} />
+                <Legend />
+                <Line yAxisId="left" type="monotone" dataKey="totalDuration" name="Duration (sec)" stroke="#8b92ff" strokeWidth={3} activeDot={{ r: 8 }} />
+                <Line yAxisId="right" type="monotone" dataKey="xpGained" name="XP Gained" stroke="#66bb6a" strokeWidth={3} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        ) : (
+          <p>Log your first workout to see your progress charts!</p>
+        )}
       </div>
 
       <div className="admin-section">

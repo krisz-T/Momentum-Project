@@ -94,7 +94,46 @@ app.get('/api/profile/workouts', authenticate, async (req, res) => {
   }
 });
 
+// --- USER PROFILE ROUTES ---
+// ... existing profile routes ...
 
+app.get('/api/profile/analytics', authenticate, async (req, res) => {
+  try {
+    // Fetch all workouts for the user to aggregate
+    const { data: workouts, error } = await supabase
+      .from('workouts')
+      .select('duration, date_logged')
+      .eq('user_id', req.user.id)
+      .order('date_logged', { ascending: true });
+
+    if (error) throw error;
+
+    // Aggregate data by date
+    const aggregatedData = workouts.reduce((acc, workout) => {
+      // Extract just the date part (YYYY-MM-DD)
+      const date = workout.date_logged.split('T')[0];
+      
+      if (!acc[date]) {
+        acc[date] = { date, count: 0, totalDuration: 0, xpGained: 0 };
+      }
+      
+      acc[date].count += 1;
+      acc[date].totalDuration += workout.duration;
+      acc[date].xpGained += Math.floor(workout.duration / 4);
+      
+      return acc;
+    }, {});
+
+    // Convert object to array for chart formatting
+    const chartData = Object.values(aggregatedData);
+    
+    // Send the aggregated data
+    res.json(chartData);
+  } catch (error) {
+    console.error('Analytics aggregation error:', error);
+    res.status(500).json({ error: 'Failed to fetch analytics data.' });
+  }
+});
 // --- PUBLIC & USER ROUTES ---
 app.get('/api/leaderboard', async (req, res) => {
   try {
